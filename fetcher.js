@@ -10,7 +10,7 @@ console.log(args[1]);
 
 
 
-const fileFetcher = function(URL, path) {
+const fileFetcher = function(URL, path, callback) {
 
   request(URL, (error, response, body) => {
     
@@ -20,7 +20,7 @@ const fileFetcher = function(URL, path) {
     
     let information = body;
     
-    makeFile(path, information);
+    callback(path, information);
     
   });
 
@@ -28,7 +28,7 @@ const fileFetcher = function(URL, path) {
 
 
 
-const makeFile = function(path, data) {
+const makeFile = (path, data) => {
   fs.appendFile(path, data, function(err) {
     if (err) throw err;
     let size = fs.statSync(path).size;
@@ -37,7 +37,7 @@ const makeFile = function(path, data) {
 }
 
 
-fileFetcher(URL, path); 
+fileFetcher(URL, path, makeFile); 
 
 //> node fetcher.js http://example.com/ ./index.html
 //Downloaded and saved 3261 bytes to ./index.html
